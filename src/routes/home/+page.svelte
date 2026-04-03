@@ -35,6 +35,16 @@
 	});
 </script>
 
+<div class="xp-header">
+	<div class="xp-left">
+		<span class="xp-level">Niv. {data.xp.level}</span>
+		<div class="xp-bar-track">
+			<div class="xp-bar-fill" style="width: {Math.round(data.xp.progressPct * 100)}%"></div>
+		</div>
+	</div>
+	<span class="xp-label">{data.xp.xpIntoLevel} / {data.xp.xpNeeded} XP</span>
+</div>
+
 <h1>Mes jeux de cartes</h1>
 
 {#if form?.error}
@@ -149,6 +159,49 @@
 {/if}
 
 <style>
+	.xp-header {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		margin-bottom: 1.2rem;
+	}
+
+	.xp-left {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		flex: 1;
+	}
+
+	.xp-level {
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: var(--accent-strong);
+		white-space: nowrap;
+	}
+
+	.xp-bar-track {
+		flex: 1;
+		height: 8px;
+		background: var(--surface);
+		border-radius: 4px;
+		overflow: hidden;
+		border: 1px solid var(--accent-secondary);
+	}
+
+	.xp-bar-fill {
+		height: 100%;
+		background: var(--accent);
+		border-radius: 4px;
+		transition: width 0.4s ease;
+	}
+
+	.xp-label {
+		font-size: 0.8rem;
+		color: var(--accent-secondary);
+		white-space: nowrap;
+	}
+
 	h1 {
 		margin-bottom: 1rem;
 	}

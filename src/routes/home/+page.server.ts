@@ -1,7 +1,8 @@
 import { db } from '$lib/server/db';
-import { decks, cards } from '$lib/server/db/schema';
+import { decks, cards, users } from '$lib/server/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { redirect, fail } from '@sveltejs/kit';
+import { xpProgress } from '$lib/server/xp';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -20,7 +21,18 @@ export const load: PageServerLoad = async ({ locals }) => {
 		.groupBy(decks.id)
 		.orderBy(decks.name);
 
-	return { decks: allDecks };
+	const userRow = await db
+		.select({ total_xp: users.total_xp })
+		.from(users)
+		.where(eq(users.id, locals.userId))
+		.then((r) => r[0]);
+
+	const { level, xpIntoLevel, xpNeeded, progressPct } = xpProgress(userRow?.total_xp ?? 0);
+
+	return {
+		decks: allDecks,
+		xp: { total: userRow?.total_xp ?? 0, level, xpIntoLevel, xpNeeded, progressPct }
+	};
 };
 
 interface ImportJson {
