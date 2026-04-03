@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+	--bg: #e5e7e6;
+	--surface: #eee6d8;
+	--accent: #daab3a;
+	--accent-secondary: #b67332;
+	--accent-strong: #93441a;
+	--text: #333;
+	--text-title: #93441a;
+	--correct: #4caf50;
+	--correct-bg: #e8f5e9;
+	--incorrect: #93441a;
+	--incorrect-bg: #fbe9e1;
+	--radius: 8px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	min-height: 100vh;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 1.5rem;
+}
+
+h1, h2, h3 {
+	color: var(--text-title);
+}
+
+button {
+	font-family: inherit;
+	cursor: pointer;
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.6rem 1.2rem;
+	font-size: 0.95rem;
+	font-weight: 600;
+	transition: background 0.2s, transform 0.1s;
+}
+
+button:active {
+	transform: scale(0.97);
+}
+
+.btn-primary {
+	background: var(--accent);
+	color: var(--accent-strong);
+}
+
+.btn-primary:hover {
+	background: var(--accent-secondary);
+	color: white;
+}
+
+.btn-danger {
+	background: var(--incorrect-bg);
+	color: var(--accent-strong);
+}
+
+.btn-danger:hover {
+	background: var(--accent-strong);
+	color: white;
+}
+
+.btn-secondary {
+	background: transparent;
+	border: 2px solid var(--accent-secondary);
+	color: var(--accent-secondary);
+}
+
+.btn-secondary:hover {
+	background: var(--accent-secondary);
+	color: white;
+}
+
+.card {
+	background: var(--surface);
+	border: 1px solid var(--accent-secondary);
+	border-radius: var(--radius);
+	padding: 1.5rem;
+}
+
+input[type='text'],
+input[type='number'] {
+	font-family: inherit;
+	font-size: 0.95rem;
+	padding: 0.6rem 0.8rem;
+	border: 2px solid var(--accent-secondary);
+	border-radius: var(--radius);
+	background: white;
+	color: var(--text);
+	outline: none;
+	transition: border-color 0.2s;
+}
+
+input[type='text']:focus,
+input[type='number']:focus {
+	border-color: var(--accent);
+}
+
+input[type='range'] {
+	accent-color: var(--accent);
+}
+
+.fade-in {
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(8px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.error-message {
+	background: var(--incorrect-bg);
+	color: var(--accent-strong);
+	padding: 0.8rem 1rem;
+	border-radius: var(--radius);
+	border: 1px solid var(--accent-strong);
+	font-size: 0.9rem;
+}
