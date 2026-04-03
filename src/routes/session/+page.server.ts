@@ -1,6 +1,7 @@
 import { db } from '$lib/server/db';
-import { cards, decks, userStats } from '$lib/server/db/schema';
+import { cards, decks, userStats, users } from '$lib/server/db/schema';
 import { eq, inArray, and, sql } from 'drizzle-orm';
+import { computeXp } from '$lib/server/xp';
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -97,6 +98,14 @@ export const actions: Actions = {
 			}
 		}
 
-		return { saved: true, isNewRecord };
+		const xpEarned = computeXp(score, total);
+		if (xpEarned > 0) {
+			await db
+				.update(users)
+				.set({ total_xp: sql`${users.total_xp} + ${xpEarned}` })
+				.where(eq(users.id, locals.userId));
+		}
+
+		return { saved: true, isNewRecord, xpEarned };
 	}
 };

@@ -3,7 +3,8 @@ import { pgTable, serial, integer, text, timestamp, unique } from 'drizzle-orm/p
 export const users = pgTable('users', {
 	id: serial('id').primaryKey(),
 	username: text('username').notNull().unique(),
-	created_at: timestamp('created_at').defaultNow()
+	created_at: timestamp('created_at').defaultNow(),
+	total_xp: integer('total_xp').notNull().default(0)
 });
 
 export const decks = pgTable('decks', {

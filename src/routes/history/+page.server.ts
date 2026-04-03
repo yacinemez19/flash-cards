@@ -1,7 +1,8 @@
 import { db } from '$lib/server/db';
-import { userStats, decks } from '$lib/server/db/schema';
+import { userStats, decks, users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { redirect } from '@sveltejs/kit';
+import { xpProgress } from '$lib/server/xp';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -28,5 +29,18 @@ export const load: PageServerLoad = async ({ locals }) => {
 				)
 			: 0;
 
-	return { stats, totalSessions, avgSuccess };
+	const userRow = await db
+		.select({ total_xp: users.total_xp })
+		.from(users)
+		.where(eq(users.id, locals.userId))
+		.then((r) => r[0]);
+
+	const { level, xpIntoLevel, xpNeeded, progressPct } = xpProgress(userRow?.total_xp ?? 0);
+
+	return {
+		stats,
+		totalSessions,
+		avgSuccess,
+		xp: { total: userRow?.total_xp ?? 0, level, xpIntoLevel, xpNeeded, progressPct }
+	};
 };

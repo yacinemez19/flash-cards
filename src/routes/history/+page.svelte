@@ -13,6 +13,17 @@
 
 <h1>Historique</h1>
 
+<div class="card level-card">
+	<div class="level-header">
+		<span class="level-badge">Niveau {data.xp.level}</span>
+		<span class="xp-total">{data.xp.total} XP total</span>
+	</div>
+	<div class="xp-bar-track">
+		<div class="xp-bar-fill" style="width: {Math.round(data.xp.progressPct * 100)}%"></div>
+	</div>
+	<div class="xp-bar-label">{data.xp.xpIntoLevel} / {data.xp.xpNeeded} XP vers le niveau {data.xp.level + 1}</div>
+</div>
+
 {#if data.stats.length === 0}
 	<div class="card empty-state">
 		<p>Aucune session jouée pour l'instant.</p>
@@ -134,6 +145,52 @@
 	.stat-details .value {
 		font-weight: 600;
 		color: var(--text);
+	}
+
+	.level-card {
+		margin-bottom: 1rem;
+		padding: 1.2rem 1.4rem;
+	}
+
+	.level-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.8rem;
+	}
+
+	.level-badge {
+		font-size: 1.4rem;
+		font-weight: 700;
+		color: var(--accent-strong);
+	}
+
+	.xp-total {
+		font-size: 0.85rem;
+		color: var(--accent-secondary);
+	}
+
+	.xp-bar-track {
+		width: 100%;
+		height: 10px;
+		background: var(--surface);
+		border-radius: 5px;
+		overflow: hidden;
+		border: 1px solid var(--accent-secondary);
+	}
+
+	.xp-bar-fill {
+		height: 100%;
+		background: var(--accent);
+		border-radius: 5px;
+		transition: width 0.5s ease;
+	}
+
+	.xp-bar-label {
+		margin-top: 0.4rem;
+		font-size: 0.8rem;
+		color: var(--accent-secondary);
+		text-align: right;
 	}
 
 	@media (max-width: 500px) {

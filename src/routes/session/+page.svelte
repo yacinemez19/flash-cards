@@ -167,7 +167,12 @@
 				</button>
 			</form>
 		{:else}
-			<p class="saved-msg">Résultat sauvegardé !</p>
+			<p class="saved-msg">
+			Résultat sauvegardé !
+			{#if form?.xpEarned > 0}
+				<span class="xp-earned">+{form.xpEarned} XP</span>
+			{/if}
+		</p>
 		{/if}
 
 		<div class="result-actions">
@@ -348,6 +353,17 @@
 		color: var(--correct);
 		font-weight: 600;
 		margin-bottom: 1rem;
+	}
+
+	.xp-earned {
+		display: inline-block;
+		margin-left: 0.5rem;
+		background: var(--accent);
+		color: var(--accent-strong);
+		font-size: 0.85rem;
+		font-weight: 700;
+		padding: 0.1rem 0.5rem;
+		border-radius: var(--radius);
 	}
 
 	.result-actions {
