@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 
 	let { data, form } = $props();
 
@@ -21,11 +20,10 @@
 		if (next.has(id)) next.delete(id);
 		else next.add(id);
 		selectedDecks = next;
-		if (cardCount > totalCards) cardCount = totalCards;
 	}
 
-	function startSession() {
-		if (selectedDecks.size === 0) return;
+	let sessionUrl = $derived.by(() => {
+		if (selectedDecks.size === 0) return null;
 		const count = Math.min(cardCount, totalCards);
 		const params = new URLSearchParams({
 			decks: [...selectedDecks].join(','),
@@ -33,8 +31,8 @@
 			mode: gameMode,
 			type: questionType
 		});
-		goto(`/session?${params}`);
-	}
+		return `/session?${params}`;
+	});
 </script>
 
 <h1>Mes jeux de cartes</h1>
@@ -114,7 +112,7 @@
 			</div>
 
 			<div class="config-field">
-				<label>Mode de jeu</label>
+				<span class="field-label">Mode de jeu</span>
 				<div class="radio-group">
 					<label>
 						<input type="radio" bind:group={gameMode} value="answer" />
@@ -128,7 +126,7 @@
 			</div>
 
 			<div class="config-field">
-				<label>Type de question</label>
+				<span class="field-label">Type de question</span>
 				<div class="radio-group">
 					<label>
 						<input type="radio" bind:group={questionType} value="qcm" />
@@ -141,9 +139,11 @@
 				</div>
 			</div>
 
-			<button class="btn-primary start-btn" onclick={startSession}>
-				Démarrer la session
-			</button>
+			{#if sessionUrl}
+				<a href={sessionUrl} class="btn-primary start-btn">
+					Démarrer la session
+				</a>
+			{/if}
 		</div>
 	{/if}
 {/if}
@@ -242,7 +242,8 @@
 		margin-bottom: 1rem;
 	}
 
-	.config-field > label {
+	.config-field > label,
+	.config-field > .field-label {
 		display: block;
 		font-weight: 600;
 		font-size: 0.9rem;
@@ -282,6 +283,9 @@
 		padding: 0.8rem;
 		font-size: 1.05rem;
 		margin-top: 0.5rem;
+		text-decoration: none;
+		text-align: center;
+		display: block;
 	}
 
 	.success-message {

@@ -22,23 +22,16 @@
 		data.mode === 'answer' ? currentCard?.answer : currentCard?.question
 	);
 
-	let choices = $derived.by(() => {
-		if (data.type !== 'qcm' || !correctAnswer) return [];
-		const others = data.allAnswers.filter((a) => a !== correctAnswer);
-		const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
-		return [...shuffled, correctAnswer].sort(() => Math.random() - 0.5);
-	});
+	let displayChoices = $state<string[]>([]);
 
-	// Cache choices so they don't re-shuffle on re-render
-	let cachedChoices = $state<string[]>([]);
-	let cachedIndex = $state(-1);
-
-	let displayChoices = $derived.by(() => {
-		if (currentIndex !== cachedIndex) {
-			cachedChoices = choices;
-			cachedIndex = currentIndex;
-		}
-		return cachedChoices;
+	$effect(() => {
+		if (data.type !== 'qcm') return;
+		const card = data.sessionCards[currentIndex];
+		if (!card) return;
+		const answer = data.mode === 'answer' ? card.answer : card.question;
+		const others = data.allAnswers.filter((a) => a !== answer);
+		const shuffled = [...others].sort(() => Math.random() - 0.5).slice(0, 3);
+		displayChoices = [...shuffled, answer].sort(() => Math.random() - 0.5);
 	});
 
 	function normalize(str: string): string {
